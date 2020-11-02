@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useState } from 'react';
-import { Container, Row, Button, Form, Card } from 'react-bootstrap';
+import { Alert, Container, Row, Button, Form, Card } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
 import { AppConsumer, AppContext } from '../../AppContext';
@@ -10,6 +10,7 @@ const LoginComponent = () => {
     const appContext = useContext(AppContext);
     const routeHistory = useHistory();
 
+    const [loginErrorVisible, setLoginErrorVisible] = useState(false);
     const [loginInfo, setLoginInfo] = useState({
         email: "",
         password: ""
@@ -19,8 +20,13 @@ const LoginComponent = () => {
         <Fragment>
             <AppConsumer>
                 {() => (
-                    <Container>
-                        <Row md={2} className="justify-content-center mt-5 ml-5 mr-5">
+                    <Container className="mt-5">
+                        <Row md={2} className="justify-content-center ml-5 mr-5">
+                            <Alert variant="danger" show={loginErrorVisible} onClose={() => setLoginErrorVisible(false)} dismissible>
+                                Login failed! Please check your e-mail address and password.
+                            </Alert>
+                        </Row>
+                        <Row md={2} className="justify-content-center ml-5 mr-5">
                             <Card>
                                 <Card.Body>
                                     <Form>
@@ -40,7 +46,7 @@ const LoginComponent = () => {
                                             }))} />
                                         </Form.Group>
                             
-                                        <Button variant="primary" type="submit" onClick={(event) => (safeClick(event, postLogin(appContext, loginInfo, routeHistory)))}>
+                                        <Button variant="primary" type="submit" onClick={(event) => (safeClick(event, postLogin(appContext, loginInfo, setLoginErrorVisible, routeHistory)))}>
                                             Login
                                         </Button>
                                     </Form>

@@ -1,6 +1,6 @@
 import { SERVICE_URL, LOGIN_ENDPOINT } from './NetworkConstants';
 
-export const postLogin = async (appContext, loginInfo, routeHistory) => {
+export const postLogin = async (appContext, loginInfo, setLoginErrorVisible, routeHistory) => {
     fetch(SERVICE_URL + LOGIN_ENDPOINT, {
         method: 'POST',
         mode: 'cors',
@@ -16,8 +16,8 @@ export const postLogin = async (appContext, loginInfo, routeHistory) => {
             if (jsonResponse.message === "Success") {
                 appContext.setAppState("appState.jwt", jsonResponse.data.jwt);
                 routeHistory.push("/products");
+            } else {
+                setLoginErrorVisible(true);
             }
-            
-            //fetchInitialState(appContext);
         });
   }
